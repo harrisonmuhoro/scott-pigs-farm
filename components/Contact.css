@@ -1,0 +1,73 @@
+.contact-section {
+  padding: 80px 0;
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.contact-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 32px;
+  backdrop-filter: blur(4px);
+  text-align: center;
+  transition: background-color 0.3s, transform 0.3s;
+  
+  /* Unique Shape: Top-Left and Bottom-Right Cuts */
+  clip-path: polygon(
+    20px 0, 
+    100% 0, 
+    100% calc(100% - 20px), 
+    calc(100% - 20px) 100%, 
+    0 100%, 
+    0 20px
+  );
+  /* Drop shadow that follows shape (harder to see on dark background but good for depth) */
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+}
+
+.contact-card:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px);
+}
+
+.icon-circle {
+  width: 64px;
+  height: 64px;
+  background-color: var(--accent);
+  /* Matching the geometric theme */
+  border-radius: 0;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+}
+
+.contact-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.contact-info {
+  color: var(--secondary);
+  line-height: 1.6;
+}
+
+.contact-sub {
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  color: var(--secondary);
+}
+
+@media (min-width: 768px) {
+  .contact-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

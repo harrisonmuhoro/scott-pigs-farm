@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Connection Test</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background-color: #d1fae5; color: #065f46; border: 1px solid #34d399; }
+        .error { background-color: #fee2e2; color: #991b1b; border: 1px solid #f87171; }
+        code { background: #f3f4f6; padding: 2px 5px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>API Connection Test</h1>
+    <p>Testing connection to: <code id="url"></code></p>
+    
+    <div id="result" class="status">Testing...</div>
+
+    <script>
+        // The URL we are trying to hit
+        const BASE_URL = 'http://localhost/pork1%20-%20Copy/api';
+        document.getElementById('url').textContent = BASE_URL;
+
+        async function testConnection() {
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                // Try to hit the metrics endpoint just to see if it responds
+                // We use metrics.php because it's a simple GET request
+                const response = await fetch(`${BASE_URL}/metrics.php`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Data received:', data);
+                    resultDiv.textContent = '✅ Success! Connected to API. Check console for data.';
+                    resultDiv.className = 'status success';
+                } else {
+                    resultDiv.textContent = `❌ Error: Server returned status ${response.status} (${response.statusText})`;
+                    resultDiv.className = 'status error';
+                }
+            } catch (error) {
+                console.error(error);
+                resultDiv.innerHTML = `❌ <strong>Failed to fetch.</strong><br>
+                Possible causes:<br>
+                1. The server (Apache) is not running.<br>
+                2. The path is incorrect (folder name mismatch).<br>
+                3. The file <code>api/metrics.php</code> does not exist at that path.`;
+                resultDiv.className = 'status error';
+            }
+        }
+
+        testConnection();
+    </script>
+</body>
+</html>

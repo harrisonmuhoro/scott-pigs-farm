@@ -1,0 +1,140 @@
+.hero {
+  position: relative;
+  height: 85vh; /* Taller hero section */
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--white);
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/Public/Images/Pigfarm.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Modern gradient overlay */
+  background: linear-gradient(135deg, rgba(31, 41, 51, 0.85) 0%, rgba(139, 30, 30, 0.7) 100%);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 20px;
+  max-width: 1000px;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.hero-title {
+  font-size: 5rem; /* Much larger text */
+  font-weight: 800; /* Extra bold */
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.03em; /* Tighter spacing */
+  
+  /* Gradient Text Effect - Left to Right */
+  background: linear-gradient(to right, var(--white) 30%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  
+  /* Drop shadow via filter (required when text is transparent) */
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+}
+
+.hero-slogan {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 3rem;
+  font-weight: 400;
+  line-height: 1.6;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 18px 42px;
+  border-radius: 8px; /* Slight rounding, more boxy */
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: all 0.3s ease;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  color: var(--white);
+  border: 2px solid var(--accent);
+  box-shadow: 0 4px 14px 0 rgba(217, 119, 6, 0.39);
+}
+
+.btn-primary:hover {
+  background-color: #b45309;
+  border-color: #b45309;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.23);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  color: var(--white);
+}
+
+.btn-outline:hover {
+  background-color: var(--white);
+  color: var(--primary);
+  border-color: var(--white);
+  transform: translateY(-2px);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 3rem;
+    line-height: 1.2;
+  }
+  .hero-slogan {
+    font-size: 1.125rem;
+    padding: 0 10px;
+  }
+  .btn {
+    padding: 14px 30px;
+    width: 100%;
+  }
+}

@@ -1,0 +1,149 @@
+/* Pork/components/AvailablePiglets.css */
+.piglets-section {
+  padding: 80px 0;
+  background-color: var(--white);
+}
+
+.piglets-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+}
+
+.piglet-card {
+  background-color: var(--secondary);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease;
+  border: 1px solid var(--gray-light);
+}
+
+.piglet-card:hover {
+  transform: translateY(-5px);
+}
+
+.parents-gallery {
+  display: flex;
+  height: 200px;
+  border-bottom: 4px solid var(--accent);
+}
+
+.parent-image-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.parent-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.parent-image-container:hover .parent-img {
+  transform: scale(1.1);
+}
+
+.parent-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  text-align: center;
+  padding: 4px 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.piglet-info {
+  padding: 24px;
+}
+
+.piglet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--gray-medium);
+  padding-bottom: 10px;
+}
+
+.piglet-breed {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.piglet-dob {
+  font-size: 0.85rem;
+  color: var(--gray-medium);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.info-item h4 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  margin-bottom: 2px;
+}
+
+.info-item p {
+  font-weight: 600;
+  color: var(--charcoal);
+}
+
+.piglet-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.piglet-price {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.btn-whatsapp {
+  background-color: #25D366;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.btn-whatsapp:hover {
+  background-color: #1ebc57;
+}
+
+@media (min-width: 768px) {
+  .piglets-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .piglets-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
