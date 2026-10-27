@@ -11,6 +11,11 @@
 
 The application combines a high-performance **React + Vite** frontend with a lightweight **PHP PDO MySQL** backend REST API, making it ideal for hosting on standard web stacks such as WAMP, XAMPP, or Linux Apache/Nginx environments.
 
+For cloud deployment, the source is split into `frontend/` (Vercel) and
+`backend/` (Render Docker service). See [DEPLOYMENT.md](DEPLOYMENT.md) for the
+required build settings, environment variables, CORS origin, and database
+requirements.
+
 ---
 
 ## ✨ Features
@@ -23,14 +28,13 @@ The application combines a high-performance **React + Vite** frontend with a lig
 - **Contact & Location Details**: Direct contact information, email, and farm location in Nyeri, Kenya.
 
 ### 🔐 Admin Management Dashboard
-- **Secure Authentication**: Protected dashboard with PHP password hashing (`password_verify`), user profile management, and recovery code password resets.
-- **Product Catalog Management**: Create, edit, and delete store products with real-time updates to the MySQL database.
+- **Secure Authentication**: Protected dashboard with PHP password hashing (`password_verify`), session-based login/logout, profile updates, Developer/Owner roles, and Developer-managed accounts. There is no self-service password recovery; access recovery must be handled operationally.
+- **Product Catalog Management**: Create, edit, and archive store products with real-time updates to the MySQL database.
 - **Pig Herd & Litter Inventory**:
-  - Track sow and boar parentage, breed, date of birth (DOB), litter size, and coat color.
-  - Automatic age calculation in weeks.
-  - Real-time record additions, edits, and deletions.
+  - Persist individual pig profiles, parentage, litters, weights, housing transfers, breeding events, and health/vaccination records.
+  - In-app estimated farrowing, follow-up, vaccination, stock, and expiry alerts.
 - **Financial Tracking & Analytics**:
-  - Record monthly revenue, feed costs, labour costs, and overhead.
+  - Preserve legacy monthly summaries and record transaction-level income, expenses, purchases, and sales separately.
   - Interactive multi-metric chart (Revenue vs. Expenses vs. Net Profit) powered by **Recharts**.
   - Historical finance table with automatic expense aggregation and profit margin calculation.
 
@@ -59,8 +63,11 @@ The application combines a high-performance **React + Vite** frontend with a lig
 ```text
 pork-farm/
 ├── api/                       # PHP REST API endpoints
-│   ├── auth.php               # Login, profile updates, and password reset
-│   ├── finances.php           # Monthly finances CRUD
+│   ├── auth.php               # Session login/logout and profile updates
+│   ├── finance_transactions.php # Transaction-level income/expense and payments
+│   ├── sales.php              # Sales and pig lifecycle posting
+│   ├── inventory.php          # Suppliers, stock movements, purchases and alerts
+│   ├── finances.php           # Legacy monthly finance summaries
 │   ├── metrics.php            # Quick financial summary metrics
 │   └── products.php           # Product catalog CRUD
 ├── components/                # React UI components & stylesheets
@@ -73,9 +80,10 @@ pork-farm/
 │   ├── Login.tsx / .css       # Admin authentication modal
 │   ├── Navbar.tsx / .css      # Header navigation bar
 │   └── Products.tsx / .css    # Product grid & WhatsApp inquiry buttons
-├── database/                  # SQL migrations and seed data
-│   ├── schema.sql             # Table schemas (products, metrics, users)
-│   └── seed.sql               # Initial farm products and mock data
+├── database/                  # Ordered SQL migrations and seed data
+│   ├── schema.sql             # Base table schemas
+│   ├── migrations/            # Ordered operational schema migrations 000–008
+│   └── seed.sql               # Optional initial public product catalog
 ├── Public/                    # Static assets & media
 │   └── Images/                # High-res farm, pig, and product photos
 ├── src/services/
@@ -105,23 +113,13 @@ Ensure you have the following installed on your system:
 
 1. Start your **Apache** and **MySQL** services in WAMP/XAMPP.
 2. Open **phpMyAdmin** (`http://localhost/phpmyadmin`) or your preferred MySQL client.
-3. Import the initial database schema and seed data:
+3. For a brand new installation only, initialize the base schema. Seed data contains only the original public product catalog and is not idempotent:
    - Run the script located in `database/schema.sql` to create the `scott_pigs` database and base tables.
-   - Run `database/seed.sql` to populate default products, metrics, and demo admin credentials.
-4. Run the database migration helper scripts in your browser or terminal to create the financial tables and auth fields:
-   ```text
-   http://localhost/pork-farm/setup_finance_db.php
-   http://localhost/pork-farm/update_auth_db.php
-   ```
+   - Optionally run `database/seed.sql` once for the initial public catalog. It no longer creates sample metrics or default admin credentials.
+4. Configure PHP database/session/CORS environment variables and follow [database/README.md](database/README.md) for the backup-gated migration order and first-owner CLI setup. Migration/setup scripts must not be run through a browser.
 
-> [!NOTE]  
-> If your MySQL user is not `root` or has a password, update the credentials in `db.php`:
-> ```php
-> $host = 'localhost';
-> $db   = 'scott_pigs';
-> $user = 'root';
-> $pass = ''; // Your MySQL password
-> ```
+> [!NOTE]
+> PHP reads database settings from its service environment (`SCOTT_DB_HOST`, `SCOTT_DB_NAME`, `SCOTT_DB_USER`, `SCOTT_DB_PASSWORD`). Use a least-privilege database account; do not put credentials in PHP source or the Vite `.env` file.
 
 ---
 
@@ -155,12 +153,9 @@ Ensure you have the following installed on your system:
 
 ---
 
-## 🔑 Default Credentials & Access
+## 🔑 Admin Access
 
-- **Admin Login Route**: Click **Admin Portal** or **Login** in the top navigation bar.
-- **Default Username**: `admin`
-- **Default Password**: `admin123` *(configurable via Admin Dashboard Settings)*
-- **Default Recovery Code**: `123456`
+There are no shipped default credentials or recovery codes. Provision initial Developer and Owner accounts using the CLI process in [database/README.md](database/README.md). Login uses a server-side PHP session; authenticated API requests require the session and CSRF token. Developers manage accounts, roles, system status, and the public catalog. Owners manage farm operations, finance, reporting, and the public catalog.
 
 ---
 
@@ -177,7 +172,20 @@ All API endpoints are located under `/api/` and return JSON responses:
 | `POST` | `/api/finances.php` | Insert or update monthly finance data (revenue & expenses) |
 | `DELETE` | `/api/finances.php` | Delete a monthly finance record by `id` |
 | `GET` | `/api/metrics.php` | Get top-level dashboard metrics (revenue, feed, net profit) |
-| `POST` | `/api/auth.php` | Authentication (actions: `login`, `update_profile`, `reset_password`) |
+| `GET` | `/api/auth.php` | Read current server session |
+| `POST` | `/api/auth.php` | Login, logout, or update the current user's profile |
+| `GET/POST/PUT/DELETE` | `/api/pigs.php` | Authenticated pig profile listing, create/update, or archive sold/deceased profiles |
+| `GET/POST` | `/api/litters.php` | Authenticated litter and farrowing records |
+| `GET/POST` | `/api/weights.php` | Weight history and measurements |
+| `GET/POST/PATCH` | `/api/pens.php`, `/api/transfers.php` | Housing locations and transfer history |
+| `GET/POST` | `/api/breeding.php`, `/api/health.php` | Reproductive, health, treatment, vaccination and in-app reminder records |
+| `GET/POST/PATCH` | `/api/inventory.php` | Suppliers, items, purchasing, movement ledger and alerts |
+| `GET/POST` | `/api/finance_transactions.php`, `/api/sales.php` | Transaction finance and sales |
+| `GET/POST/PATCH` | `/api/users.php` | Developer-managed Developer/Owner accounts |
+| `GET` | `/api/system_status.php` | Developer-only PHP and database connectivity status |
+| `GET` | `/api/reports.php?report=...&from=YYYY-MM-DD&to=YYYY-MM-DD` | Role-authorized CSV export (10,000-row cap) |
+
+For migration order, environment configuration, account bootstrap, posting rules, and known release blockers, see [database/README.md](database/README.md) and [IMPLEMENTATION_PROCEDURE.md](IMPLEMENTATION_PROCEDURE.md). Migrations have not been applied to any database by this implementation session.
 
 ---
 

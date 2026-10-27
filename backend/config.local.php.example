@@ -1,0 +1,11 @@
+<?php
+// Copy to config.local.php for local development. Never commit that real file.
+return [
+    'SCOTT_DB_HOST' => '127.0.0.1',
+    'SCOTT_DB_NAME' => 'scott_pigs',
+    'SCOTT_DB_USER' => '',
+    'SCOTT_DB_PASSWORD' => '',
+    // Optional one-time values; create_first_owner.php clears them after success.
+    'SCOTT_OWNER_USERNAME' => '',
+    'SCOTT_OWNER_PASSWORD' => '',
+];

@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: scott-pigs-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/healthcheck.php
+    envVars:
+      - key: SCOTT_APP_ENV
+        value: production
+      - key: SCOTT_TIMEZONE
+        value: Africa/Nairobi
+      - key: SCOTT_ALLOWED_ORIGINS
+        sync: false
+      - key: SCOTT_DB_HOST
+        sync: false
+      - key: SCOTT_DB_NAME
+        sync: false
+      - key: SCOTT_DB_USER
+        sync: false
+      - key: SCOTT_DB_PASSWORD
+        sync: false
+      - key: SCOTT_SESSION_SAMESITE
+        value: None

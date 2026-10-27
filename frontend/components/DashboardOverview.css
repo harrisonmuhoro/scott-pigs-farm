@@ -1,0 +1,122 @@
+.farm-overview {
+  padding: 26px;
+  border: 1px solid #e7e9ed;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgb(15 23 42 / 5%);
+}
+
+.farm-overview-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.farm-overview-heading h2 {
+  margin: 0 0 5px;
+  color: var(--charcoal);
+  font-size: 1.35rem;
+}
+
+.farm-overview-heading p {
+  margin: 0;
+  color: var(--gray-medium);
+  font-size: 0.9rem;
+}
+
+.farm-overview-refresh {
+  padding: 8px 13px;
+  border: 1px solid #d7dce2;
+  border-radius: 7px;
+  background: #fff;
+  color: var(--charcoal);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.farm-overview-refresh:hover { background: #f8fafc; }
+
+.farm-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: 14px;
+}
+
+.farm-metric-card {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  gap: 3px 11px;
+  min-height: 132px;
+  padding: 17px;
+  border: 1px solid #e8ebef;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--charcoal);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+}
+
+.farm-metric-card:hover,
+.farm-metric-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: #cbd5e1;
+  box-shadow: 0 7px 18px rgb(15 23 42 / 8%);
+  outline: none;
+}
+
+.farm-metric-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  grid-row: span 2;
+  place-items: center;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.farm-metric-label {
+  overflow: hidden;
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.farm-metric-value {
+  grid-column: 2;
+  overflow-wrap: anywhere;
+  color: #172033;
+  font-size: clamp(1.3rem, 2.1vw, 1.8rem);
+  line-height: 1.2;
+}
+
+.farm-metric-detail {
+  grid-column: 1 / -1;
+  align-self: end;
+  margin-top: 10px;
+  color: #64748b;
+  font-size: 0.76rem;
+}
+
+.tone-green .farm-metric-icon { background: #ecfdf5; color: #047857; }
+.tone-blue .farm-metric-icon { background: #eff6ff; color: #1d4ed8; }
+.tone-violet .farm-metric-icon { background: #f5f3ff; color: #6d28d9; }
+.tone-amber .farm-metric-icon { background: #fffbeb; color: #b45309; }
+.tone-rose .farm-metric-icon { background: #fff1f2; color: #be123c; }
+
+@media (max-width: 640px) {
+  .farm-overview { padding: 18px 14px; }
+  .farm-metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .farm-metric-card { grid-template-columns: 32px minmax(0, 1fr); min-height: 124px; padding: 12px; gap: 3px 8px; }
+  .farm-metric-icon { width: 32px; height: 32px; }
+  .farm-metric-label { font-size: 0.74rem; }
+  .farm-metric-detail { font-size: 0.69rem; }
+}

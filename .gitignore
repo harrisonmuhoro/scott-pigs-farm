@@ -11,6 +11,12 @@ node_modules
 dist
 dist-ssr
 *.local
+/config.local.php
+/backend/config.local.php
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+.env
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +28,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+Scott_Pigs_Farm_Final_Development_Prompt.md
+Scott_Pigs_Farm_Final_PRD.md
+IMPLEMENTATION_PROCEDURE.md
+DEPLOYMENT_CHECKLIST.md
+DEPLOYMENT_CHECKLIST.md
+IMPLEMENTATION_STATUS.md
+DEPLOYMENT.md
