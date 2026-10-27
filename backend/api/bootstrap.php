@@ -27,6 +27,15 @@ try {
     error_log('Invalid SCOTT_TIMEZONE configured; using UTC.');
 }
 $configuredOrigins = getenv('SCOTT_ALLOWED_ORIGINS');
+if ($configuredOrigins === false || trim($configuredOrigins) === '') {
+    $localConfigPath = dirname(__DIR__) . '/config.local.php';
+    if (is_file($localConfigPath)) {
+        $localConfig = require $localConfigPath;
+        if (is_array($localConfig) && isset($localConfig['SCOTT_ALLOWED_ORIGINS'])) {
+            $configuredOrigins = (string)$localConfig['SCOTT_ALLOWED_ORIGINS'];
+        }
+    }
+}
 $allowedOrigins = $configuredOrigins !== false && trim($configuredOrigins) !== ''
     ? array_values(array_filter(array_map('trim', explode(',', $configuredOrigins))))
     : ($environment === 'production' ? [] : ['http://localhost:3000', 'http://127.0.0.1:3000']);

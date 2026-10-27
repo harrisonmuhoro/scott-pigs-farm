@@ -5,6 +5,7 @@ return [
     'SCOTT_DB_NAME' => 'scott_pigs',
     'SCOTT_DB_USER' => '',
     'SCOTT_DB_PASSWORD' => '',
+    'SCOTT_ALLOWED_ORIGINS' => 'https://harrisonmuhoro.infinityfree.me',
     // Optional one-time values; create_first_owner.php clears them after success.
     'SCOTT_OWNER_USERNAME' => '',
     'SCOTT_OWNER_PASSWORD' => '',
